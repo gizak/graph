@@ -18,6 +18,7 @@ type adjNode struct {
 
 type adjList []adjNode
 
+// NewAdjList returns a adjancency list structure implementing Graph interface
 func NewAdjList() *adjList {
 	foo := adjList([]adjNode{})
 	return &foo
@@ -125,16 +126,55 @@ func (g *adjList) DelEdge(from, to int) {
 	}
 }
 
-func (g *adjList) GetNeighbours(id int) []interface{} {
-	return nil
+func (g *adjList) GetNeighbours(id int) []int {
+	nb := []int{}
+	n := g.getNode(id)
+	if n != nil {
+		for p := n.next; p != nil; p = p.next {
+			nb = append(nb, p.id)
+		}
+	}
+	return nb
 }
 
-func (g *adjList) IsAdjacent(a, b int) bool {
+func (g *adjList) GetInverseNbs(id int) []int {
+	nb := []int{}
+	g.IterVertices(func(gg Graph, from int) {
+		if gg.GetEdge(from, id) != nil {
+			nb = append(nb, from)
+		}
+	})
+	return nb
+}
+
+func (g *adjList) hasEdge(from, to int) bool {
+	n0, n1 := g.getNode(from), g.getNode(to)
+
+	if n0 != nil && n1 != nil {
+		for p := n0.next; p != nil; p = p.next {
+			if p.id == n1.id {
+				return true
+			}
+		}
+	}
 	return false
 }
 
-func (g *adjList) IterEdges(f func(int, int)) {
+func (g *adjList) IsAdjacent(a, b int) bool {
+	return g.hasEdge(a, b) || g.hasEdge(b, a)
 }
 
-func (g *adjList) IterVertices(f func(int)) {
+func (g *adjList) IterEdges(f func(Graph, int, int)) {
+	g.IterVertices(func(g Graph, from int) {
+		nb := g.GetNeighbours(from)
+		for _, to := range nb {
+			f(g, from, to)
+		}
+	})
+}
+
+func (g *adjList) IterVertices(f func(Graph, int)) {
+	for i := range *g {
+		f(g, (*g)[i].id)
+	}
 }

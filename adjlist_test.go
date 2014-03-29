@@ -68,13 +68,55 @@ func TestStruct(t *testing.T) {
 		})
 
 		Convey("Del Certain Edge Without Side Effects", func() {
+			al.DelEdge(0, 2)
 			al.DelEdge(0, 1)
 			So(al.GetEdge(0, 1), ShouldBeNil)
 			So(al.GetEdge(1, 2), ShouldEqual, "1->2")
-			So(al.GetEdge(0, 2), ShouldEqual, "0-2")
+			So(al.GetEdge(0, 2), ShouldBeNil)
 		})
+	})
+}
+
+func TestNeighbours(t *testing.T) {
+	al := NewAdjList()
+	al.SetVertex(0, "hello")
+	al.SetVertex(1, "world")
+	al.SetVertex(2, "!")
+	al.SetEdge(0, 1, "0->1")
+	al.SetEdge(0, 2, "0->2")
+	al.SetEdge(2, 0, "2->0")
+
+	Convey("Is Neighbour", t, func() {
+		So(al.IsAdjacent(0, 1), ShouldBeTrue)
+		So(al.IsAdjacent(0, 2), ShouldBeTrue)
+		So(al.IsAdjacent(2, 0), ShouldBeTrue)
+		So(al.IsAdjacent(2, 1), ShouldBeFalse)
+	})
+
+	Convey("Get Neighbours", t, func() {
+		nb0 := al.GetNeighbours(0)
+		So(len(nb0), ShouldEqual, 2)
+		So(nb0[1], ShouldEqual, 2)
+	})
+
+	Convey("Get Inverse Neighbours", t, func() {
+		nb0 := al.GetInverseNbs(0)
+		So(len(nb0), ShouldEqual, 1)
+		So(nb0[0], ShouldEqual, 2)
+	})
+
+}
+
+func TestIteration(t *testing.T) {
+
+	Convey("Iter Vertices", t, func() {
 
 	})
+
+	Convey("Iter Edges", t, func() {
+
+	})
+
 }
 
 func TestInterface(t *testing.T) {

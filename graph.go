@@ -10,9 +10,10 @@ type Graph interface {
 	DelEdge(a, b int)
 	GetEdge(a, b int) interface{}
 
-	GetNeighbours(id int) []interface{}
+	GetNeighbours(id int) []int
+	GetInverseNbs(id int) []int
 	IsAdjacent(a, b int) bool
 
-	IterVertices(func(int))
-	IterEdges(func(int, int))
+	IterVertices(func(Graph, int))
+	IterEdges(func(Graph, int, int))
 }
