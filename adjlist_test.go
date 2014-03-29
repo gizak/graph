@@ -47,6 +47,7 @@ func TestStruct(t *testing.T) {
 			al.SetEdge(0, 1, "0->1")
 			al.SetEdge(0, 2, "0->2")
 			al.SetEdge(1, 2, "1->2")
+			al.SetEdge(0, 0, "0->0") //self
 			So((*al)[0].next, ShouldNotBeNil)
 			So((*al)[0].next.id, ShouldEqual, 1)
 			So((*al)[0].next.edge, ShouldEqual, "0->1")
@@ -57,6 +58,7 @@ func TestStruct(t *testing.T) {
 			So(e, ShouldEqual, "0->1")
 			So(al.GetEdge(1, 0), ShouldBeNil)
 			So(al.GetEdge(1, 2), ShouldEqual, "1->2")
+			So(al.GetEdge(0, 0), ShouldEqual, "0->0") // self
 		})
 
 		Convey("Update Edge", func() {
@@ -72,6 +74,22 @@ func TestStruct(t *testing.T) {
 			al.DelEdge(0, 1)
 			So(al.GetEdge(0, 1), ShouldBeNil)
 			So(al.GetEdge(1, 2), ShouldEqual, "1->2")
+			So(al.GetEdge(0, 2), ShouldBeNil)
+		})
+		Convey("Del Nodes With Related Edges", func() {
+			al := NewAdjList()
+			al.SetVertex(0, "hello")
+			al.SetVertex(1, "world")
+			al.SetVertex(2, "!")
+			al.SetEdge(0, 1, "0->1")
+			al.SetEdge(0, 2, "0->2")
+			al.SetEdge(1, 2, "1->2")
+			al.SetEdge(2, 0, "2->0")
+
+			al.DelVertex(2)
+			So(al.GetVertex(2), ShouldBeNil)
+			So(al.GetEdge(1, 2), ShouldBeNil)
+			So(al.GetEdge(2, 0), ShouldBeNil)
 			So(al.GetEdge(0, 2), ShouldBeNil)
 		})
 	})
@@ -104,7 +122,6 @@ func TestNeighbours(t *testing.T) {
 		So(len(nb0), ShouldEqual, 1)
 		So(nb0[0], ShouldEqual, 2)
 	})
-
 }
 
 func TestIteration(t *testing.T) {
@@ -134,7 +151,6 @@ func TestIteration(t *testing.T) {
 		So(al.GetEdge(2, 0), ShouldEqual, "-")
 		So(al.GetEdge(2, 1), ShouldBeNil)
 	})
-
 }
 
 func TestInterface(t *testing.T) {
@@ -144,6 +160,5 @@ func TestInterface(t *testing.T) {
 		Convey("Implementated Graph Interface", func() {
 			foo(al)
 		})
-
 	})
 }

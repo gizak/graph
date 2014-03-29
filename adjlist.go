@@ -62,6 +62,11 @@ func (g *adjList) DelVertex(id int) {
 	if idx != -1 {
 		*g = append((*g)[:idx], (*g)[idx+1:]...)
 	}
+	// del corresponding edges
+	nbs := g.GetInverseNbs(id)
+	for _, v := range nbs {
+		g.DelEdge(v, id)
+	}
 }
 
 func (g *adjList) SetEdge(from, to int, v interface{}) {
