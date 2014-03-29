@@ -108,13 +108,31 @@ func TestNeighbours(t *testing.T) {
 }
 
 func TestIteration(t *testing.T) {
-
+	al := NewAdjList()
+	al.SetVertex(0, "hello")
+	al.SetVertex(1, "world")
+	al.SetVertex(2, "!")
+	al.SetEdge(0, 1, "0->1")
+	al.SetEdge(0, 2, "0->2")
+	al.SetEdge(2, 0, "2->0")
 	Convey("Iter Vertices", t, func() {
-
+		al.IterVertices(func(g Graph, id int) {
+			g.SetVertex(id, "*")
+		})
+		So(al.GetVertex(0), ShouldEqual, "*")
+		So(al.GetVertex(1), ShouldEqual, "*")
+		So(al.GetVertex(2), ShouldEqual, "*")
+		So(al.GetVertex(3), ShouldBeNil)
 	})
 
 	Convey("Iter Edges", t, func() {
-
+		al.IterEdges(func(g Graph, from, to int) {
+			g.SetEdge(from, to, "-")
+		})
+		So(al.GetEdge(0, 1), ShouldEqual, "-")
+		So(al.GetEdge(0, 2), ShouldEqual, "-")
+		So(al.GetEdge(2, 0), ShouldEqual, "-")
+		So(al.GetEdge(2, 1), ShouldBeNil)
 	})
 
 }
