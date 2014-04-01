@@ -1,5 +1,4 @@
-![building status](https://travis-ci.org/gizak/graph.svg?branch=master)
-graph
+graph ![building status](https://travis-ci.org/gizak/graph.svg?branch=master)
 =====
 
 A neat directed graph interface implementation
