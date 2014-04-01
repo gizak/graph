@@ -1,3 +1,4 @@
+![building status](https://travis-ci.org/gizak/graph.svg?branch=master)
 graph
 =====
 
@@ -18,4 +19,7 @@ Import it into your package:
 
 ###Synopsis
 
-###Working on...
+###Documents
+Served at [godoc.org](http://godoc.org/github.com/gizak/graph)
+
+###TODOs
