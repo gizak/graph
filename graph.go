@@ -1,3 +1,4 @@
+// Package graph implements basic graph storing and relationships operations algorithm. Currently only offer adjacency list structure, the other structures will come in future.
 package graph
 
 // Graph interfece is a super set of standard graph struct interface

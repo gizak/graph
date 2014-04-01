@@ -16,15 +16,16 @@ type adjNode struct {
 	next *edgeCh
 }
 
-type adjList []adjNode
+// AdjList is the adjacency list implementation
+type AdjList []adjNode
 
 // NewAdjList returns a adjancency list structure implementing Graph interface
-func NewAdjList() *adjList {
-	foo := adjList([]adjNode{})
+func NewAdjList() *AdjList {
+	foo := AdjList([]adjNode{})
 	return &foo
 }
 
-func (g *adjList) getNode(id int) *adjNode {
+func (g *AdjList) getNode(id int) *adjNode {
 	for i := range *g {
 		if (*g)[i].id == id {
 			return &(*g)[i]
@@ -33,7 +34,8 @@ func (g *adjList) getNode(id int) *adjNode {
 	return nil
 }
 
-func (g *adjList) SetVertex(id int, val interface{}) {
+// SetVertex uses pointer receiver to add or update a value given id.
+func (g *AdjList) SetVertex(id int, val interface{}) {
 	for i, v := range *g {
 		if v.id == id {
 			(*g)[i].val = val
@@ -43,7 +45,8 @@ func (g *adjList) SetVertex(id int, val interface{}) {
 	*g = append(*g, adjNode{node{id, val}, nil})
 }
 
-func (g adjList) GetVertex(id int) interface{} {
+// GetVertex returns the data associating with the given id, nil will be returned if there is nothing being stored.
+func (g AdjList) GetVertex(id int) interface{} {
 	for _, v := range g {
 		if v.id == id {
 			return v.val
@@ -52,7 +55,8 @@ func (g adjList) GetVertex(id int) interface{} {
 	return nil
 }
 
-func (g *adjList) DelVertex(id int) {
+// DelVertex deletes the node (if exists) given id.
+func (g *AdjList) DelVertex(id int) {
 	idx := -1
 	for i, v := range *g {
 		if v.id == id {
@@ -69,7 +73,8 @@ func (g *adjList) DelVertex(id int) {
 	}
 }
 
-func (g *adjList) SetEdge(from, to int, v interface{}) {
+// SetEdge sets an edge from an node to the other given ids with value v.
+func (g *AdjList) SetEdge(from, to int, v interface{}) {
 	n0 := g.getNode(from)
 	n1 := g.getNode(to)
 	if n0 != nil && n1 != nil {
@@ -95,7 +100,8 @@ func (g *adjList) SetEdge(from, to int, v interface{}) {
 	}
 }
 
-func (g *adjList) GetEdge(from, to int) interface{} {
+// GetEdge retreive the edge value, nil returns if it is non-existance.
+func (g *AdjList) GetEdge(from, to int) interface{} {
 	n0 := g.getNode(from)
 	n1 := g.getNode(to)
 
@@ -109,7 +115,8 @@ func (g *adjList) GetEdge(from, to int) interface{} {
 	return nil
 }
 
-func (g *adjList) DelEdge(from, to int) {
+// DelEdge removes the edge from the underlying graph.
+func (g *AdjList) DelEdge(from, to int) {
 	n0 := g.getNode(from)
 	n1 := g.getNode(to)
 
@@ -131,7 +138,8 @@ func (g *adjList) DelEdge(from, to int) {
 	}
 }
 
-func (g *adjList) GetNeighbours(id int) []int {
+// GetNeighbours returns the nodes' ids list pointed by the given node.
+func (g *AdjList) GetNeighbours(id int) []int {
 	nb := []int{}
 	n := g.getNode(id)
 	if n != nil {
@@ -142,7 +150,8 @@ func (g *adjList) GetNeighbours(id int) []int {
 	return nb
 }
 
-func (g *adjList) GetInverseNbs(id int) []int {
+// GetInverseNbs returns the nodes' id slice, which contains the nodes point to the given node.
+func (g *AdjList) GetInverseNbs(id int) []int {
 	nb := []int{}
 	g.IterVertices(func(gg Graph, from int) {
 		if gg.GetEdge(from, id) != nil {
@@ -152,7 +161,7 @@ func (g *adjList) GetInverseNbs(id int) []int {
 	return nb
 }
 
-func (g *adjList) hasEdge(from, to int) bool {
+func (g *AdjList) hasEdge(from, to int) bool {
 	n0, n1 := g.getNode(from), g.getNode(to)
 
 	if n0 != nil && n1 != nil {
@@ -165,11 +174,13 @@ func (g *adjList) hasEdge(from, to int) bool {
 	return false
 }
 
-func (g *adjList) IsAdjacent(a, b int) bool {
+// IsAdjacent test if a and b is adjancent.
+func (g *AdjList) IsAdjacent(a, b int) bool {
 	return g.hasEdge(a, b) || g.hasEdge(b, a)
 }
 
-func (g *adjList) IterEdges(f func(Graph, int, int)) {
+// IterEdges iterates all the edges, passing the edges' from and to nodes id to the argument function one by one.
+func (g *AdjList) IterEdges(f func(Graph, int, int)) {
 	g.IterVertices(func(g Graph, from int) {
 		nb := g.GetNeighbours(from)
 		for _, to := range nb {
@@ -178,7 +189,8 @@ func (g *adjList) IterEdges(f func(Graph, int, int)) {
 	})
 }
 
-func (g *adjList) IterVertices(f func(Graph, int)) {
+// IterVertices iterates all the vertices in the graph, passing the nodes' ids to the given function argument.
+func (g *AdjList) IterVertices(f func(Graph, int)) {
 	for i := range *g {
 		f(g, (*g)[i].id)
 	}
