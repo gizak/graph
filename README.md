@@ -1,4 +1,4 @@
-graph ![building status](https://travis-ci.org/gizak/graph.svg?branch=master)
+graph ![building status](https://travis-ci.org/gizak/graph.svg?branch=master) <span> </span> [![Coverage Status](http://coveralls.io/repos/gizak/graph/badge.png)](http://coveralls.io/r/gizak/graph)
 =====
 
 A neat directed graph interface implementation
