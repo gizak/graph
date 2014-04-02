@@ -6,6 +6,3 @@ go:
 install:
   - go get code.google.com/p/go.tools/cmd/cover
   - go get -t github.com/smartystreets/goconvey
-  - go get github.com/mattn/goveralls
-
-script: go test -covermode=count -coverprofile=profile.cov && goveralls -coverprofile=profile.cov -service=travis-ci
